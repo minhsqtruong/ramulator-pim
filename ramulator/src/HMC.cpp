@@ -21,10 +21,13 @@ map<string, enum HMC::Org> HMC::org_map = {
     {"HMC_4GB_va128", HMC::Org::HMC_4GB_va128},
     {"HMC_4GB_va256", HMC::Org::HMC_4GB_va256},
     {"HMC_4GB_va512", HMC::Org::HMC_4GB_va512},
-    {"HMC_4GB_va1024", HMC::Org::HMC_4GB_va1024}
+    {"HMC_4GB_va1024", HMC::Org::HMC_4GB_va1024},
+
+    {"HMC_4GB_va16", HMC::Org::HMC_4GB_va16} // 742: 16 Vaults
 };
 
 map<string, enum HMC::Speed> HMC::speed_map = {
+    {"HMC_2500", HMC::Speed::HMC_2500},
     {"HMC_2500_unlimit_bandwidth", HMC::Speed::HMC_2500_unlimit_bandwidth},
 };
 

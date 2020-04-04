@@ -35,7 +35,7 @@ public:
     enum class LaneSpeed;
     HMC(Org org, Speed speed, MaxBlock maxblock, LinkWidth linkwidth, LaneSpeed lanespeed, int source_links, int payload_flits);
     HMC(const string& org_str, const string& speed_str, const string& maxblock_str, const string& linkwidth_str, const string& lanespeed_str, int source_links, int payload_flits);
-    
+
     static map<string, enum Org> org_map;
     static map<string, enum Speed> speed_map;
     static map<string, enum MaxBlock> maxblock_map;
@@ -43,34 +43,34 @@ public:
     static map<string, enum LaneSpeed> lanespeed_map;
     /*** Level ***/
     enum class Level : int
-    { 
+    {
         Vault, BankGroup, Bank, Row, Column, MAX
     };
 
     /*** Command ***/
     enum class Command : int
-    { 
-        ACT, PRE, PREA, 
-        RD,  WR,  RDA,  WRA, 
-        REF, PDE, PDX,  SRE, SRX, 
+    {
+        ACT, PRE, PREA,
+        RD,  WR,  RDA,  WRA,
+        REF, PDE, PDX,  SRE, SRX,
         MAX
     };
 
     string command_name[int(Command::MAX)] = {
-        "ACT", "PRE", "PREA", 
-        "RD",  "WR",  "RDA",  "WRA", 
+        "ACT", "PRE", "PREA",
+        "RD",  "WR",  "RDA",  "WRA",
         "REF", "PDE", "PDX",  "SRE", "SRX"
     };
 
     // HMC doesn't have rank level[1] so every commands that end at rank level
     // are at vault level now.
     Level scope[int(Command::MAX)] = {
-        Level::Row,    Level::Bank,   Level::Vault,   
+        Level::Row,    Level::Bank,   Level::Vault,
         Level::Column, Level::Column, Level::Column, Level::Column,
         Level::Vault,   Level::Vault,   Level::Vault,   Level::Vault,   Level::Vault
     };
 
-    bool is_opening(Command cmd) 
+    bool is_opening(Command cmd)
     {
         switch(int(cmd)) {
             case int(Command::ACT):
@@ -80,7 +80,7 @@ public:
         }
     }
 
-    bool is_accessing(Command cmd) 
+    bool is_accessing(Command cmd)
     {
         switch(int(cmd)) {
             case int(Command::RD):
@@ -93,7 +93,7 @@ public:
         }
     }
 
-    bool is_closing(Command cmd) 
+    bool is_closing(Command cmd)
     {
         switch(int(cmd)) {
             case int(Command::RDA):
@@ -106,7 +106,7 @@ public:
         }
     }
 
-    bool is_refreshing(Command cmd) 
+    bool is_refreshing(Command cmd)
     {
         switch(int(cmd)) {
             case int(Command::REF):
@@ -146,7 +146,7 @@ public:
         int dist;
         int val;
         bool sibling;
-    }; 
+    };
     vector<TimingEntry> timing[int(Level::MAX)][int(Command::MAX)];
 
     /* Lambda */
@@ -167,6 +167,8 @@ public:
       HMC_4GB_va256,
       HMC_4GB_va512,
       HMC_4GB_va1024,
+
+      HMC_4GB_va16, // 742: 16 Vaults
       MAX
     };
 
@@ -187,6 +189,8 @@ public:
         {32<<10, 32, {256, 4, 2, 1<<13, 1<<6}},
         {32<<10, 32, {512, 4, 2, 1<<12, 1<<6}},
         {32<<10, 32, {1024, 4, 2, 1<<11, 1<<6}},
+
+        {32<<10, 32, {16, 8, 2, 1<<16, 1<<6}}, // 742: 16 Vaults
     }, org_entry;
 
     /* Speed */
@@ -248,7 +252,7 @@ public:
     int payload_flits = 4; // TODO to make it flexible
 
     int burst_count = 0; // real_payload_flits / one_fetch_flits
-    
+
     int max_tags = 1 << 11;
 
 private:
