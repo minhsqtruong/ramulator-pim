@@ -329,7 +329,7 @@ MemObject* BuildMemoryController(Config& config, uint32_t lineSize, uint32_t fre
 
     //Latency
     uint32_t latency = (type == "DDR")? -1 : config.get<uint32_t>("sys.mem.latency", 100);
-    
+
     MemObject* mem = nullptr;
     if (type == "Simple") {
         mem = new SimpleMemory(latency, name);
@@ -702,6 +702,10 @@ static void InitSystem(Config& config) {
                     //Build the core
                     if (type == "Simple") {
                         core = new (&simpleCores[j]) SimpleCore(ic, dc, name);
+
+                        // 742: Add multiple simple cores
+                        coreMap[group].push_back(core);
+                        coreIdx++;
                     } else if (type == "Timing") {
                         uint32_t domain = j*zinfo->numDomains/cores;
                         TimingCore* tcore = new (&timingCores[j]) TimingCore(ic, dc, domain, name);
@@ -1061,4 +1065,3 @@ void SimInit(const char* configFile, const char* outputDir, uint32_t shmid) {
     //Causes every other process to wake up
     gm_set_glob_ptr(zinfo);
 }
-
